@@ -92,24 +92,41 @@ private extension EmployeeDetailViewController {
 
     bioTextView.text = employee.about
 
-    salesCountLabel.text = salesCountForEmployee(employee)
+    salesCountLabel.text = salesCountForEmployeeFast(employee)
   }
 }
 
 // MARK: Internal
 extension EmployeeDetailViewController {
 
+  // Fetch all sales for a given employee and returns the count of the returned array
   func salesCountForEmployee(_ employee: Employee) -> String {
     
     let fetchRequest: NSFetchRequest<Sale> = Sale.fetchRequest()
-    fetchRequest.predicate = NSPredicate(format: "%K = %@",
-                                         argumentArray: [#keyPath(Sale.employee),
-                                                         employee])
+    fetchRequest.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(Sale.employee), employee])
 
     let context = employee.managedObjectContext!
+    
     do {
-      let results = try context.fetch(fetchRequest)
+      let results = try context.fetch(fetchRequest) // Core Data returns an array of Sales: [Sale]
       return "\(results.count)"
+    } catch let error as NSError {
+      print("Error: \(error.localizedDescription)")
+      return "0"
+    }
+  }
+  
+  // Fetch all sales for a given employee and returns the count of the returned array
+  func salesCountForEmployeeFast(_ employee: Employee) -> String {
+
+    let fetchRequest: NSFetchRequest<Sale> = Sale.fetchRequest()
+    fetchRequest.predicate = NSPredicate(format: "%K = %@", argumentArray: [#keyPath(Sale.employee), employee])
+
+    let context = employee.managedObjectContext!
+
+    do {
+      let results = try context.count(for: fetchRequest) // Core Data returns an Int
+      return "\(results)"
     } catch let error as NSError {
       print("Error: \(error.localizedDescription)")
       return "0"

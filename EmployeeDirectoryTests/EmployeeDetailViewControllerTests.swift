@@ -32,16 +32,28 @@ import CoreData
 @testable import EmployeeDirectory
 
 class EmployeeDetailViewControllerTests: XCTestCase {
-
+  
   func testCountSales() {
-    measureMetrics([.wallClockTime],
-                   automaticallyStartMeasuring: false) {
+    measureMetrics([.wallClockTime], automaticallyStartMeasuring: false) {
+      
+      let employee = getEmployee()
+      let employeeDetails = EmployeeDetailViewController()
+      
+      startMeasuring()
+      _ = employeeDetails.salesCountForEmployee(employee)
+      stopMeasuring()
+    }
+  }
+  
+  func testCountSalesFast() {
+    measureMetrics([.wallClockTime], automaticallyStartMeasuring: false) {
 
-                    let employee = getEmployee()
-                    let employeeDetails = EmployeeDetailViewController()
-                    startMeasuring()
-                    _ = employeeDetails.salesCountForEmployee(employee)
-                    stopMeasuring()
+      let employee = getEmployee()
+      let employeeDetails = EmployeeDetailViewController()
+      
+      startMeasuring()
+      _ = employeeDetails.salesCountForEmployeeFast(employee)
+      stopMeasuring()
     }
   }
   
