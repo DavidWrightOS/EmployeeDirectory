@@ -92,13 +92,14 @@ private extension EmployeeDetailViewController {
 
     bioTextView.text = employee.about
 
-    salesCountLabel.text = salesCountForEmployeeFast(employee)
+    salesCountLabel.text = salesCountForEmployeeSimple(employee)
   }
 }
 
 // MARK: Internal
 extension EmployeeDetailViewController {
 
+  // MARK: - Option 1
   // Fetch all sales for a given employee and returns the count of the returned array
   func salesCountForEmployee(_ employee: Employee) -> String {
     
@@ -116,6 +117,7 @@ extension EmployeeDetailViewController {
     }
   }
   
+  // MARK: - Option 2
   // Fetch all sales for a given employee and returns the count of the returned array
   func salesCountForEmployeeFast(_ employee: Employee) -> String {
 
@@ -131,5 +133,11 @@ extension EmployeeDetailViewController {
       print("Error: \(error.localizedDescription)")
       return "0"
     }
+  }
+  
+  // MARK: - Option 3
+  // Use the relationship to access the 'Set' of Sales related to the given Employee
+  func salesCountForEmployeeSimple(_ employee: Employee) -> String {
+    return "\(employee.sales!.count)"
   }
 }
